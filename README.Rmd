@@ -8,7 +8,9 @@ output:
   pdf_document: default
 ---
 
-
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
 ## GISS Global Temperature
 
@@ -17,8 +19,7 @@ https://data.giss.nasa.gov/gistemp/graphs_v4/#
 Download the temperature data from nasa
 https://data.giss.nasa.gov/gistemp/graphs_v4/graph_data/Hemispheric_Temperature_Change/graph.csv
 
-
-```sh
+```{sh downloads}
 serverName="https://data.giss.nasa.gov/gistemp/graphs_v4/graph_data" 
 fileName="graph.csv"
 for folderName in "Temperature_Anomalies_over_Land_and_over_Ocean" "Temperature_Change_for_Three_Latitude_Bands" "Hemispheric_Temperature_Change" 
@@ -35,15 +36,8 @@ do
 done
 ```
 
-```
-## Download file: Temperature_Anomalies_over_Land_and_over_Ocean.csv
-## Download file: Temperature_Change_for_Three_Latitude_Bands.csv
-## Download file: Hemispheric_Temperature_Change.csv
-```
 
-
-
-```r
+```{r convert}
 temp1 <- read.csv("./download/Temperature_Anomalies_over_Land_and_over_Ocean.csv", sep=",", skip = 1)
 temp1 <- temp1[,c("Year","Land_Annual","Ocean_Annual")]
 
@@ -76,16 +70,8 @@ write.table(temp, file = "csv/yearly_temperature_global.csv", append = FALSE, qu
 
 ## Plot Temperature
 
-
-```r
+```{r plot, echo=TRUE}
 require("ggplot2")
-```
-
-```
-## Loading required package: ggplot2
-```
-
-```r
 temp <- read.csv("./csv/yearly_temperature_global.csv", sep=",")
 mp <- ggplot() +
       geom_line(aes(y=temp$n72, x=temp$year), color="#ff0022") +
@@ -99,11 +85,8 @@ mp <- ggplot() +
   
       xlab("Year") + ylab("Temperature ['C]")
 mp
-```
 
-![](README_files/figure-html/plot-1.png)<!-- -->
 
-```r
 mp <- ggplot() +
       #geom_line(aes(y=temp$global, x=temp$year), color="cyan") +
       geom_line(aes(y=temp$ocean, x=temp$year), color="blue") +
@@ -114,8 +97,6 @@ mp <- ggplot() +
       xlab("Year") + ylab("Temperature ['C]")
 mp
 ```
-
-![](README_files/figure-html/plot-2.png)<!-- -->
 
 
 
